@@ -49,9 +49,16 @@ $team2 = $teams[($j + 10) % 20];
 }
 
 // Выводим календарь
-echo "<table>";
+echo "<table border='1'>";
+echo "<tr>";
+echo "<th>Тур</th>";
+for ($j = 0; $j < 10; $j++) {
+    echo "<th>Матч $j</th>";
+}
+echo "</tr>";
 for ($i = 0; $i < 38; $i++) {
-    echo "<tr><td>$i Тур</td>";
+    echo "<tr>";
+    echo "<td>$i</td>";
     for ($j = 0; $j < 10; $j++) {
         echo "<td>" . $schedule[$i][$j] . "</td>";
     }
