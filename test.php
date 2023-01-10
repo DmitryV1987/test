@@ -1,6 +1,15 @@
 <head>
     <link rel="stylesheet" type="text/css" href="tabl.css">
-</head>
+    <script src="jquery-3.6.3.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("td").click(function(){
+                var team = $(this).text();
+                $("td:contains(" + team + ")").addClass("highlight");
+            });
+        });
+    </script>
+    </head>
 <?php
 
 // Массив с названиями команд
