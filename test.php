@@ -10,69 +10,61 @@
         });
     </script>
     </head>
-<?php
+<?php 
+$teams = array("Луверуполь", "Челси", "Тоттенхуй", "Арсенал", "Манчестер", "Эвертон", "Лейстер", "Вест Хем", "Уотфорд", "Бернли", "Брайтон", "Саутхемптон", "Борнмут", "Альбион", "Норвич", "Шеффилд", "Фулхэм", "Сток Сити", "Милдсбро", "Суонси");
+$numTeams = count($teams);
+$rounds = $numTeams - 1;
+$matchesPerRound = $numTeams / 2;
 
-// Массив с названиями команд
-$teams = array("Ливерпуль",
-    "Челси",
-    "Тоттенхэм Хотспур",
-    "Арсенал",
-    "Манчестер Юнайтед",
-    "Эвертон",
-    "Лестер Сити",
-    "Вест Хэм Юнайтед",
-    "Уотфорд",
-    "Борнмут",
-    "Бернли",
-    "Саутгемптон",
-    "Брайтон энд Хоув Альбион",
-    "Норвич Сити",
-    "Шеффилд Юнайтед",
-    "Фулхэм",
-    "Сток Сити",
-    "Мидлсбро",
-    "Суонси Сити",
-    "Дерби Каунти");
-
-// Двумерный массив, где $schedule[$i][$j] - матч $j в туре $i
+$hosts = array();
+$guests = array();
 $schedule = array();
 
-// Цикл по турам
-for ($i = 0; $i < 38; $i++) {
-// Цикл по матчам в туре
-for ($j = 0; $j < 10; $j++) {
-// Назначаем команды для матча
-$team1 = $teams[$j];
-$team2 = $teams[($j + 10) % 20];
-    // Определяем, кто играет дома
-    if ($i % 2 == 0) {
-        // Если это четный тур, то команда $team1 играет дома
-        $schedule[$i][$j] = "$team1 - $team2";
+for ($round = 1; $round <= $rounds; $round++) {
+  for ($match = 1; $match <= $matchesPerRound; $match++) {
+    if ($round % 2 == 1) {
+      $hosts[$round][$match] = $numTeams;
     } else {
-        // Иначе, команда $team2 играет дома
-        $schedule[$i][$j] = "$team2 - $team1";
+      $guests[$round][$match] = $numTeams;
     }
-}
-    // Перемешиваем команды
-    shuffle($teams);
+  }
 }
 
-// Выводим календарь
-echo "<table border='1'>";
-echo "<tr>";
-echo "<th>Тур</th>";
-for ($j = 0; $j < 10; $j++) {
-    echo "<th>Матч $j</th>";
-}
-echo "</tr>";
-for ($i = 0; $i < 38; $i++) {
-    echo "<tr>";
-    echo "<td>$i</td>";
-    for ($j = 0; $j < 10; $j++) {
-        echo "<td>" . $schedule[$i][$j] . "</td>";
+$k = 0;
+for ($round = 1; $round <= $rounds; $round++) {
+  for ($match = 1; $match <= $matchesPerRound; $match++) {
+    $k = ($k < $numTeams - 1) ? $k + 1 : 1;
+    if ($hosts[$round][$match] == 0) {
+      $hosts[$round][$match] = $k;
+    } else {
+      $guests[$round][$match] = $k;
     }
+  }
+}
+
+$k = $numTeams - 1;
+for ($round = 1; $round <= $rounds; $round++) {
+  for ($match = 1; $match <= $matchesPerRound; $match++) {
+    if ($guests[$round][$match] == 0) {
+      $guests[$round][$match] = $k;
+      $k = ($k == 1) ? $numTeams - 1 : $k - 1;
+    }
+  }
+}
+
+echo "<table>";
+echo "<tr><th>RND</th><th>№</th><th>HOME</th><th>AWAY</th></tr>";
+for ($round = 1; $round <= $rounds; $round++) {
+  for ($match = 1; $match <= $matchesPerRound; $match++) {
+    echo "<tr>";
+    echo "<td>$round</td>";
+    echo "<td>$match</td>";
+    echo "<td>{$teams[$hosts[$round][$match]-1]}</td>";
+    echo "<td>{$teams[$guests[$round][$match]-1]}</td>";
     echo "</tr>";
+  }
 }
 echo "</table>";
+?>
 
 ?>
